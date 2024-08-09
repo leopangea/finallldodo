@@ -48,8 +48,8 @@ let gravity = 1;
 let gameOver = false;
 let gameStarted = false;
 let score = 0;
-const targetScore = 500;
-const hideMessageScore = 1000;
+const targetScore = 10000;
+const hideMessageScore = 11000;
 let successSoundPlayed = false;
 
 //sound

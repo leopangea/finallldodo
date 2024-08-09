@@ -114,10 +114,14 @@ function startGame() {
   setInterval(placeCactus, 1000); //1000 milliseconds = 1 second
 }
 
+const fps = 60;
+var realfps = 0;
+
 function update(timestamp) {
   if (!lastTime) {
     lastTime = timestamp;
   }
+  realfps = Math.round(1000 / (timestamp - lastTime));
   const deltaTime = (timestamp - lastTime) / 1000; // convert to seconds
   lastTime = timestamp;
 
@@ -129,7 +133,8 @@ function update(timestamp) {
 
     //dino
     velocityY += gravity;
-    dino.y = Math.min(dino.y + velocityY * deltaTime * 50 * speedFactor, dinoY); // apply gravity to current dino.y, making sure it doesn't exceed the ground
+    dino.y = Math.min(dino.y + velocityY, dinoY); //apply gravity to current dino.y, making sure it doesn't exceed the ground
+    // dino.y = Math.min(dino.y + velocityY * deltaTime * 50 * speedFactor, dinoY); // apply gravity to current dino.y, making sure it doesn't exceed the ground
     context.drawImage(dinoImg, dino.x, dino.y, dino.width, dino.height);
 
     //cactus
@@ -155,15 +160,20 @@ function update(timestamp) {
     score++;
     context.fillText(score, 5, 20);
 
-    const message = document.getElementById('message');
+    //fps - output if needed
+    // context.fillStyle = "black";
+    // context.font = "10px courier";
+    // context.fillText(realfps, boardWidth - 20, 20);
+
+    const message = document.getElementById("message");
     if (score >= targetScore && score < hideMessageScore) {
-      message.style.display = 'block';
+      message.style.display = "block";
       if (!successSoundPlayed) {
         WinSound.play();
         successSoundPlayed = true;
       }
     } else if (score >= hideMessageScore) {
-      message.style.display = 'none';
+      message.style.display = "none";
       WinSound.pause();
       successSoundPlayed = false;
     }
@@ -175,8 +185,10 @@ function update(timestamp) {
       context.fillText("Press 'SPACE' or TAP to restart", 340, 150, 240);
     }
   }
-
-  requestAnimationFrame(update);
+  setTimeout(() => {
+    requestAnimationFrame(update);
+  }, 1000 / fps);
+  // requestAnimationFrame(update);
 }
 
 function handleKeyDown(e) {
@@ -282,5 +294,5 @@ function restartGame() {
   cactusArray = [];
   dinoImg.src = baseUrl + "img/gamedodonew.png";
   backgroundMusic.play();
-  const message = document.get
+  // const message = document.get;
 }
